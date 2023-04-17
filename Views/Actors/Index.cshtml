@@ -1,0 +1,24 @@
+﻿@model IEnumerable<MDB.Models.Actor>
+@{
+    ViewBag.Title = "Index";
+}
+<div class="prevent-select">
+    <h2>
+        Acteurs
+        @if ((bool)Session["CRUD_Access"])
+        {
+            @Helper.IconCmd("Actors", "Create", "fa-plus-square", "Ajouter...")
+        }
+    </h2>
+
+    <hr />
+    <div class="main">
+        <div id="ActorsContainer" class="ActorsContainer"> <!-- Refreshed periodically --> </div>
+    </div>
+</div>
+@section Scripts {
+    <script defer>
+        PartialRefresh.setEndSessionAction("@Url.Action("End","Session")");
+        let actors = new PartialRefresh("@Url.Action("Actors", "Actors")", "ActorsContainer", 5);
+    </script>
+}

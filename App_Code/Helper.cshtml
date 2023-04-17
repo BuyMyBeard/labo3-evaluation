@@ -1,0 +1,268 @@
+﻿@helper AvatarProfilLink(MDB.Models.User user)
+{
+    var Url = new System.Web.Mvc.UrlHelper(HttpContext.Current.Request.RequestContext);
+    var avatarUrl = Url.Content(user.GetAvatarURL());
+    var linkUrl = Url.Action("Profil", "Accounts");
+    <a href="@linkUrl" data-toogle="tooltip" title="Modifier le profil">
+        <div class="UserSmallAvatar"
+             style="background: url(@avatarUrl)"></div>
+    </a>
+}
+@helper AvatarUser(MDB.Models.User user, string avatarClass = "UserMediumAvatar")
+{
+    var Url = new System.Web.Mvc.UrlHelper(HttpContext.Current.Request.RequestContext);
+    var avatarUrl = Url.Content(user.GetAvatarURL());
+    <div class="userItem">
+        <div class="@avatarClass" style="background: url(@avatarUrl)"></div>
+        <div class="ellipsis">@user.GetFullName()</div>
+    </div>
+}
+@helper UsersCheckList(IEnumerable<MDB.Models.User> users, List<int> selectedUsers, string usersCheckListName = "UsersCheckList")
+{
+    var Url = new System.Web.Mvc.UrlHelper(HttpContext.Current.Request.RequestContext);
+
+    <div class="usersCheckList">
+        @foreach (var user in users)
+        {
+            var avatarUrl = Url.Content(user.GetAvatarURL());
+            string chekBoxId = usersCheckListName + "_" + user.Id.ToString();
+            if (selectedUsers.Contains(user.Id))
+            {
+                <input type="checkbox" name="@usersCheckListName" id="@chekBoxId" value="@user.Id" checked />
+            }
+            else
+            {
+                <input type="checkbox" name="@usersCheckListName" id="@chekBoxId" value="@user.Id" />
+            }
+            <label for="@chekBoxId">
+                @Helper.AvatarUser(user, "UserSmallAvatar")
+            </label>
+
+        }
+    </div>
+}
+@helper OnLineStatusIcon(bool onLine, bool blocked = false)
+{
+    var Url = new System.Web.Mvc.UrlHelper(HttpContext.Current.Request.RequestContext);
+    var icon = (onLine ? "~/Content/UI-icons/OnLine.png" : "~/Content/UI-icons/OffLine.png");
+    if (blocked)
+    {
+        icon = (onLine ? "~/Content/UI-icons/OnLine.png" : "~/Content/UI-icons/Masked.png");
+    }
+    var iconUrl = Url.Content(icon);
+    <img src="@iconUrl" class="small_icon" />
+}
+@helper TimeOutIcon()
+{
+    var Url = new System.Web.Mvc.UrlHelper(HttpContext.Current.Request.RequestContext);
+    var iconUrl = Url.Content("~/Content/UI-icons/timeout.png");
+    <img src="@iconUrl" class="small_icon" />
+}
+@helper Checked(bool checkStatus)
+{
+    var Url = new System.Web.Mvc.UrlHelper(HttpContext.Current.Request.RequestContext);
+    if (checkStatus)
+    {
+        <img src="@Url.Content("~/Content/UI-icons/Accept.png")" class="small_icon" />
+    }
+    else
+    {
+        <div></div>
+    }
+}
+@helper UserTypeIcon(int genderId)
+{
+    var Url = new System.Web.Mvc.UrlHelper(HttpContext.Current.Request.RequestContext);
+    var icon = "";
+    var tooltip = "";
+    switch (genderId)
+    {
+        case 1: icon = "~/Content/UI-icons/admin.png"; tooltip = "Administrateur"; break;
+        case 2: icon = "~/Content/UI-icons/power user.png"; tooltip = "Usager prévilégié"; break;
+        default: icon = "~/Content/UI-icons/user.png"; tooltip = "Usager standard"; break;
+    }
+    var iconUrl = Url.Content(icon);
+    <img src="@iconUrl" class="UserSmallAvatar" title="@tooltip" />
+}
+@helper GenderIcon(int genderId)
+{
+    var Url = new System.Web.Mvc.UrlHelper(HttpContext.Current.Request.RequestContext);
+    var icon = "";
+    switch (genderId)
+    {
+        case 1: icon = "~/Content/UI-icons/male.png"; break;
+        case 2: icon = "~/Content/UI-icons/female.png"; break;
+        default: icon = "~/Content/UI-icons/neutral.png"; break;
+    }
+    var iconUrl = Url.Content(icon);
+    <img src="@iconUrl" class="small_icon" />
+}
+@helper ImageLink(string controller, string action, string imageUrl, string imageClass, string title)
+{
+    var Url = new System.Web.Mvc.UrlHelper(HttpContext.Current.Request.RequestContext);
+    <a href="@Url.Action(action, controller)">
+        <img src="@Url.Content(imageUrl)" class="@imageClass" title="@title" />
+    </a>
+}
+@helper Icon(string controlId, string icon_class, string TooltipMessage, string ToolTipPlacement = "bottom")
+{
+    <span id="@controlId"
+          class="icon fa @icon_class"
+          title="@TooltipMessage"
+          data-placement="@ToolTipPlacement">
+    </span>
+}
+@helper IconCmd(string controller, string action, string icon_class, string TooltipMessage, string ToolTipPlacement = "bottom")
+{
+    var Url = new System.Web.Mvc.UrlHelper(HttpContext.Current.Request.RequestContext);
+    <a href="@Url.Action(action,controller)" style="text-decoration:none">
+        <span class="icon fa @icon_class"
+              title="@TooltipMessage"
+              data-placement="@ToolTipPlacement">
+        </span>
+    </a>
+}
+@helper IconConfirmCmd(string controller, string Action, string icon_class, string TooltipMessage, string ToolTipPlacement = "bottom")
+{
+    //// http://bootboxjs.com/documentation.html#bb-confirm
+    /// To do window.location is considered has a new connexion and cause authentification problems
+    var Url = new System.Web.Mvc.UrlHelper(HttpContext.Current.Request.RequestContext);
+    <div onclick='bootbox.confirm("@TooltipMessage", function(result){ if (result) window.location.href = "@Url.Action(Action,controller)"; })'>
+        <span class="icon fa @icon_class"
+              title="@TooltipMessage"
+              data-placement="@ToolTipPlacement">
+        </span>
+    </div>
+}
+@helper IconConfirmAjaxCmd(string controller, string Action, string icon_class, string TooltipMessage, string ToolTipPlacement = "bottom")
+{
+    //// http://bootboxjs.com/documentation.html#bb-confirm
+    /// To do window.location is considered has a new connexion and cause authentification problems
+    var Url = new System.Web.Mvc.UrlHelper(HttpContext.Current.Request.RequestContext);
+    <div onclick='bootbox.confirm("@TooltipMessage", function(result) { if (result) ajaxActionCall("@Url.Action(Action,controller)") })'>
+        <span class="icon fa @icon_class"
+              title="@TooltipMessage"
+              data-placement="@ToolTipPlacement">
+        </span>
+    </div>
+}
+@helper IconConfirmCmdWithParam(string controller, string Action, object extraparam, string icon_class, string TooltipMessage, string ToolTipPlacement = "bottom")
+{
+    //// http://bootboxjs.com/documentation.html#bb-confirm
+    var Url = new System.Web.Mvc.UrlHelper(HttpContext.Current.Request.RequestContext);
+    <div onclick='bootbox.confirm("@TooltipMessage", function(result){ if (result) window.location = "@(Url.Action(Action, controller, extraparam))"; })'>
+        <span class="icon fa @icon_class"
+              title="@TooltipMessage"
+              data-placement="@ToolTipPlacement">
+        </span>
+    </div>
+}
+@helper ListToRadioButtonGroup(string name, System.Web.Mvc.SelectList options, int selectedValue)
+{
+    <div class="RadioButtonsGroup">
+        @foreach (System.Web.Mvc.SelectListItem option in options.Items)
+        {
+            string id = name + "_" + option.Value;
+            <div class="RadioButton">
+                @if (option.Value == selectedValue.ToString())
+                {
+                    <input type="radio" name="@name" class="@name" id="@id" value="@option.Value.ToString()" checked />
+                }
+                else
+                {
+                    <input type="radio" name="@name" class="@name" id="@id" value="@option.Value.ToString()" />
+                }
+                <label for="@id">@option.Text</label>
+            </div>
+        }
+    </div>
+    <br />
+}
+@helper SelectionLists(string controlId, System.Web.Mvc.SelectList selectedItems, System.Web.Mvc.SelectList items, int size = 10)
+{
+    <div class="select_@controlId selectionsGrid">
+        <select name='@controlId' size='@size.ToString()' multiple class='SelectedItems form-control'>
+            @if (selectedItems != null)
+            {
+                foreach (var si in selectedItems)
+                {
+                    <option value='@si.Value'>@si.Text</option>
+                }
+            }
+        </select>
+        <div class="selectionsIcons">
+            <div class="MoveLeft icon fa fa-toggle-left" data-toggle="tooltip" data-placement="top" title="Ajouter"></div>
+            <div class="MoveRight icon fa fa-toggle-right" data-toggle="tooltip" data-placement="bottom" title="Retirer"></div>
+        </div>
+        <select size='@size.ToString()' multiple class='UnselectedItems form-control'>
+            @if (items != null)
+            {
+                foreach (var ui in items)
+                {
+                    bool found = false;
+                    if (selectedItems != null)
+                    {
+                        foreach (var si in selectedItems)
+                        {
+                            if (si.Value == ui.Value)
+                            {
+                                found = true;
+                                break;
+                            }
+                        }
+                    }
+                    if (!found)
+                    {
+                        <option value='@ui.Value'>@ui.Text</option>
+                    }
+                }
+            }
+        </select>
+    </div>
+}
+@helper ImageUploader(int modelId, string targetControlId, string imageUrl, string waitingImage = "", string TooltipMessage = "", string ToolTipPlacement = "bottom")
+{
+    var Url = new System.Web.Mvc.UrlHelper(HttpContext.Current.Request.RequestContext);
+    imageUrl = Url.Content(imageUrl);
+    waitingImage = Url.Content(waitingImage);
+    <div class='imageUploader'
+         id='@modelId'
+         controlId='@targetControlId'
+         imageSrc='@imageUrl'
+         waitingImage='@waitingImage'
+         data-toggle="tooltip"
+         data-placement="@ToolTipPlacement"
+         title="@TooltipMessage">
+    </div>
+}
+@helper Image(string url, string cssClass)
+{
+    var Url = new System.Web.Mvc.UrlHelper(HttpContext.Current.Request.RequestContext);
+    url = Url.Content(url);
+    <div class="@cssClass" style="background:url(@url);"></div>
+}
+@helper CountrySelector(string controlId, string selectedCode)
+{
+    if (string.IsNullOrEmpty(selectedCode))
+    {
+        selectedCode = "us";
+    }
+    <div class="countrySelector">
+        <select class="form-control countrySelect" name="@controlId">
+            @foreach (var country in MDB.Models.Countries.List)
+            {
+                string selected = selectedCode == country.Code ? "selected" : "";
+                <option value="@country.Code" @selected>@country.Name</option>
+            }
+        </select>
+        @Helper.CountryFlag(selectedCode)
+    </div>
+}
+@helper CountryFlag(string countryCode)
+{
+    var country = MDB.Models.Countries.Get(countryCode);
+    if (country != null)
+    {
+        <img id="flag" src="@country.Flag" title="@country.Name" style="width:40px;" />
+    }
+}

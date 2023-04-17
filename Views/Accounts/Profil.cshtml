@@ -1,0 +1,77 @@
+﻿@model MDB.Models.User
+
+@{
+    ViewBag.Title = "Profil";
+    ViewBag.SubmitText = "Modifier";
+    ViewBag.Subscribing = false;
+}
+
+@{Html.RenderPartial("AccountForm");}
+
+<div>
+    @Html.ActionLink("Retour", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script defer>
+var unchangedPasswordCode = '@((string)Session["GUID"])';
+var showPassword = false;
+setUnchangedPassword();
+$("#ConfirmEmail").val($("#Email").val());
+$.validator.addMethod(
+"GenderId",
+function (value, element) { return ($("input[name='GenderId']:checked").val() != undefined); },
+"Choix obligatoire"
+);
+function setUnchangedPassword() {
+$("#Password").val(unchangedPasswordCode);
+$("#ConfirmPassword").val(unchangedPasswordCode);
+$("#Password").prop("readonly", true);
+$("#ConfirmPassword").prop("readonly", true);
+$("#toggleShowPassword").hide();
+$("#Password").attr("type", 'password');
+$("#ConfirmPassword").attr("type", 'password');
+}
+function resetPassword() {
+$("#Password").prop("readonly", false);
+$("#ConfirmPassword").prop("readonly", false);
+$("#Password").val('');
+$("#ConfirmPassword").val('');
+$("#toggleShowPassword").hide();
+$("#toggleShowPassword").removeClass("fa-eye");
+$("#toggleShowPassword").addClass("fa-eye-slash");
+showPassword = false;
+}
+function toggleShowPassword() {
+showPassword = !showPassword;
+if (showPassword) {
+$("#Password").attr("type", 'text');
+$("#ConfirmPassword").attr("type", 'text');
+$("#toggleShowPassword").addClass("fa-eye");
+$("#toggleShowPassword").removeClass("fa-eye-slash");
+} else {
+$("#Password").attr("type", 'password');
+$("#ConfirmPassword").attr("type", 'password');
+$("#toggleShowPassword").removeClass("fa-eye");
+$("#toggleShowPassword").addClass("fa-eye-slash");
+}
+}
+$("#changePassword").change(function () {
+if (!this.checked)
+setUnchangedPassword()
+else
+resetPassword()
+});
+$("#toggleShowPassword").hide();
+$("#toggleShowPassword").click(() => { toggleShowPassword(); });
+$("#Password").keyup(() => {
+if ($("#Password").val() == "")
+$("#toggleShowPassword").hide();
+else {
+if ($("#changePassword").is(':checked'))
+$("#toggleShowPassword").show();
+}
+})
+    </script>
+}

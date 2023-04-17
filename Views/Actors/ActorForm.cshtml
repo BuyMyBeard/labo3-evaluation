@@ -1,0 +1,61 @@
+﻿@model MDB.Models.Actor
+@{
+    string pageTitle = Model.Id == 0 ? "Ajout d'acteur" : "Modification d'acteur";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h3>@pageTitle</h3>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.Id)
+        @Html.HiddenFor(model => model.AvatarImageKey)
+
+        <div class="form-group">
+            @Html.Label("Nom", htmlAttributes: new { @class = "control-label col-md-2 legend" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.BirthDate, htmlAttributes: new { @class = "control-label col-md-2 legend" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.BirthDate, new { htmlAttributes = new { @class = "form-control datepicker" } })
+                @Html.ValidationMessageFor(model => model.BirthDate, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.CountryCode, htmlAttributes: new { @class = "control-label col-md-2 legend" })
+            <div class="col-md-10">
+                @Helper.CountrySelector("CountryCode", Model.CountryCode)
+                @Html.ValidationMessageFor(model => model.CountryCode, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.AvatarImageData, htmlAttributes: new { @class = "control-label col-md-2 legend" })
+            <div class="col-md-10">
+                @Helper.ImageUploader(Model.Id, "AvatarImageData", Model.GetAvatarURL(), "~/Images_Data/Loading_icon.gif", "Cliquez pour choisir une image")
+                @Html.ValidationMessageFor(model => model.AvatarImageData, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.Label("Filmographie", htmlAttributes: new { @class = "control-label col-md-2 legend" })
+            <div class="col-md-10">
+                @Helper.SelectionLists("SelectedMoviesId", ViewBag.Castings, ViewBag.Movies, 8)
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Enregistrer" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Retour", "Index")
+</div>

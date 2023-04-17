@@ -1,0 +1,31 @@
+﻿@model MDB.Models.User
+
+@{
+    ViewBag.Title = "Inscription";
+    ViewBag.SubmitText = "S'inscrire";
+    ViewBag.Subscribing = true;
+}
+
+@{Html.RenderPartial("AccountForm");} 
+
+<div>
+    @Html.ActionLink("Retour", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+<script defer>
+        $("#toggleShowPassword").hide();
+        $("#toggleShowPassword").click(() => {
+            $("#Password").attr("type", $("#Password").attr("type") == 'password' ? 'text' : 'password');
+            $("#toggleShowPassword").toggleClass("fa-eye");
+            $("#toggleShowPassword").toggleClass("fa-eye-slash");
+        });
+        $("#Password").keyup(() => {
+            if ($("#Password").val() == "")
+                $("#toggleShowPassword").hide();
+            else
+                $("#toggleShowPassword").show();
+        })
+</script>
+}

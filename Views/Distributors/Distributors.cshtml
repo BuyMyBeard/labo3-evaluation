@@ -1,0 +1,11 @@
+﻿@model IEnumerable<MDB.Models.Distributor>
+
+@foreach (var item in Model)
+{
+    <a href="@Url.Action("Details","Distributors", new {id=item.Id})">
+        <div class="DistributorContainer" title="@item.Name">
+            @Helper.Image(item.GetLogoURL(true), "smallLogo")
+        </div>
+    </a>
+}
+

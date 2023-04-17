@@ -1,0 +1,21 @@
+﻿
+@{
+    ViewBag.Title = "VerifyDone";
+}
+
+<h2>@ViewBag.Title</h2>
+<hr />
+
+<div>
+    Bonjour @ViewBag.Name,<br />
+    <br />
+    Votre adresse de courriel est maintenant vérifiée.<br />
+    <br />
+    Cliquez sur le lien ci-dessous pour vous connecter.<br />
+    <br />
+    Merci et bonne journée,<br />
+    <br />
+    Webmestre<br />
+    @Html.ActionLink("Connexion", "Login")
+</div>
+

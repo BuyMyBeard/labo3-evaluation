@@ -1,0 +1,47 @@
+﻿@model MDB.Models.Movie
+
+@{
+    ViewBag.Title = "Details " + Model.Title;
+}
+<div class="mainDetails">
+    <div class="prevent-select" style="padding-top:10px;">
+        <div style="display:grid; grid-template-columns:auto 35px 35px; align-items:baseline;">
+            <div class="MovieDetailsTitle"> @Model.Title</div>
+            @if ((bool)Session["CRUD_Access"])
+            {
+                @Helper.IconCmd("Movies", "Edit/" + Model.Id, "fa-edit", "Modifier...")
+                @Helper.IconConfirmCmd("Movies", "Delete/" + Model.Id, "fa-times-rectangle-o", "Effacer " + Model.Title + "?")
+            }
+        </div>
+        <div class="MovieDetails-left">
+            <div>
+                @Helper.Image(Model.GetPosterURL(false), "largePoster")
+                <div style="display: grid; grid-template-columns: 45px auto; margin-left:1px; margin-top: 8px; margin-bottom: 8px;align-items:center">
+                    @Helper.CountryFlag(Model.CountryCode)
+                    <div>Année de sortie @Model.ReleaseYear</div>
+                </div>
+            </div>
+            <div class="MovieDetails-right">
+                <div class="detailsSectionTitle">Synopsis</div>
+                <p style="text-align:justify">
+                    @Model.Synopsis
+                </p>
+                <div>
+                    <div class="detailsSectionTitle">Acteurs</div>
+                    <div class="ActorsContainer" style="margin-top:10px">
+                        @{ Html.RenderPartial("~/Views/Actors/Actors.cshtml", Model.Actors); }
+                    </div>
+                </div>
+                <div>
+                    <div style="font-size:1.5em; border-bottom:1px solid #ccc">Distributeurs</div>
+                    <div class="DistributorsContainer" style="margin-top:10px; margin-left:10px">
+                        @{ Html.RenderPartial("~/Views/Distributors/Distributors.cshtml", Model.Distributors); }
+                    </div>
+                </div>
+            </div>
+        </div>
+        <p>
+            @Html.ActionLink("retour", "Index")
+        </p>
+    </div>
+</div>

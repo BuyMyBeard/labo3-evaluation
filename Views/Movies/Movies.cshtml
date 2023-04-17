@@ -1,0 +1,12 @@
+﻿@model IEnumerable<MDB.Models.Movie>
+
+@foreach (var item in Model)
+{
+    <a href="@Url.Action("Details","Movies", new {id=item.Id})">
+        <div class="MovieContainer" title="@item.Title">
+            @Helper.Image(item.GetPosterURL(true), "smallPoster")
+            <div class="ellipsis" style="margin-top:5px;text-align:center; width:inherit">@item.Title</div>
+        </div>
+    </a>
+}
+

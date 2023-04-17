@@ -1,0 +1,36 @@
+﻿@model MDB.Models.Actor
+
+@{
+    ViewBag.Title = "Details " + Model.Name;
+}
+<div class="mainDetails">
+    <div class="prevent-select" style="padding-top:10px;">
+        <div style="display:grid; grid-template-columns:auto 35px 35px; align-items:baseline;">
+            <div class="ActorDetailsName"> @Model.Name</div>
+            @if ((bool)Session["CRUD_Access"])
+            {
+                @Helper.IconCmd("Actors", "Edit/" + Model.Id, "fa-edit", "Modifier...")
+                @Helper.IconConfirmCmd("Actors", "Delete/" + Model.Id, "fa-times-rectangle-o", "Effacer " + Model.Name + "?")
+            }
+        </div>
+        <div class="ActorDetails-left">
+            <div>
+                @Helper.Image(Model.GetAvatarURL(false), "largeAvatar")
+                <div style="display: grid; grid-template-columns: 45px auto; margin-left:1px; margin-top: 8px; margin-bottom: 8px;align-items:center">
+                    @Helper.CountryFlag(Model.CountryCode)
+                    <div> Né le @Model.BirthDate.ToLongDateString()</div>
+
+                </div>
+            </div>
+            <div class="ActorDetails-right">
+                <div class="detailsSectionTitle">Filmographie</div>
+                <div class="MoviesContainer" style="margin-top:10px">
+                    @{ Html.RenderPartial("~/Views/Movies/Movies.cshtml", Model.Movies); }
+                </div>
+            </div>
+        </div>
+        <p>
+            @Html.ActionLink("retour", "Index")
+        </p>
+    </div>
+</div>

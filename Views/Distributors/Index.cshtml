@@ -1,0 +1,24 @@
+﻿@model IEnumerable<MDB.Models.Distributor>
+@{
+    ViewBag.Title = "Index";
+}
+<div class="prevent-select">
+    <h2>
+        Distributeurs
+        @if ((bool)Session["CRUD_Access"])
+        {
+            @Helper.IconCmd("Distributors", "Create", "fa-plus-square", "Ajouter...")
+        }
+    </h2>
+
+    <hr />
+    <div class="main">
+        <div id="DistributorsContainer" class="DistributorsContainer"> <!-- Refreshed periodically --> </div>
+    </div>
+</div>
+@section Scripts {
+    <script defer>
+        PartialRefresh.setEndSessionAction("@Url.Action("End","Session")");
+        let Distributors = new PartialRefresh("@Url.Action("Distributors", "Distributors")", "DistributorsContainer", 5);
+    </script>
+}

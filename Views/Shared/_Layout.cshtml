@@ -1,0 +1,53 @@
+﻿@{
+    MDB.Models.User currentUser = MDB.Models.OnlineUsers.GetSessionUser();
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+</head>
+<body>
+    <div>
+        <div class="main-menu">
+            @Helper.ImageLink("Home", "About", "/info-icon.png", "menu-Images", "A propos...")
+            @if (currentUser != null)
+            {
+                @Helper.ImageLink("Movies", "Index", "/favicon.ico", "menu-Images", "Liste des films...")
+                @Helper.ImageLink("Actors", "Index", "/actors_logo.png", "menu-Images", "Liste des acteurs...")
+                @Helper.ImageLink("Distributors", "Index", "/Distributors_Logo.png", "menu-Images", "Liste des distributeurs...")
+
+                if (currentUser.IsAdmin)
+                {
+                    @Helper.IconCmd("Accounts", "UserList", "menu-Icon fa fa-users", "Gestion des usagers...")
+                    @Helper.IconCmd("Accounts", "GroupEmail", "menu-Icon fa fa-envelope", "Courriel...")
+                    @Helper.IconCmd("Accounts", "LoginsJournal", "menu-Icon fa fa-calendar", "Journal des connexions...")
+                }
+               
+                @Helper.AvatarProfilLink(currentUser)
+                @Helper.IconCmd("Accounts", "Logout", "menu-Icon fa fa-sign-out", "Se déconnecter...")
+            }
+            else
+            {
+                @Helper.IconCmd("Accounts", "Login", "menu-Icon fa fa-sign-in", "Se connecter...")
+            }
+        </div>
+    </div>
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - Répertoire des films</p>
+        </footer>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

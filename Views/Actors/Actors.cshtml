@@ -1,0 +1,12 @@
+﻿@model IEnumerable<MDB.Models.Actor>
+
+@foreach (var item in Model)
+{
+    <a href="@Url.Action("Details","Actors", new {id=item.Id})">
+        <div class="ActorContainer">
+            @Helper.Image(item.GetAvatarURL(true), "smallAvatar")
+            <div class="ellipsis" style="margin-top:5px;text-align:center; width:inherit">@item.Name</div>
+        </div>
+    </a>
+}
+
